@@ -11,7 +11,7 @@ import (
 
 func TestTokenStore(t *testing.T) {
 	Convey("Test mongodb token store", t, func() {
-		store := NewTokenStore(NewConfig(url, dbName))
+		store := NewTokenStore(NewConfig(url, dbName, "", ""))
 
 		Convey("Test authorization code store", func() {
 			info := &models.Token{

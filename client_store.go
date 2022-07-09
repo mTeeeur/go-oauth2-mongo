@@ -1,6 +1,8 @@
 package mongo
 
 import (
+	"time"
+
 	"github.com/globalsign/mgo"
 	"gopkg.in/oauth2.v3"
 	"gopkg.in/oauth2.v3/models"
@@ -12,6 +14,8 @@ type ClientConfig struct {
 	ClientsCName string
 }
 
+const timeout = 15 * time.Second
+
 // NewDefaultClientConfig create a default client configuration
 func NewDefaultClientConfig() *ClientConfig {
 	return &ClientConfig{
@@ -21,7 +25,17 @@ func NewDefaultClientConfig() *ClientConfig {
 
 // NewClientStore create a client store instance based on mongodb
 func NewClientStore(cfg *Config, ccfgs ...*ClientConfig) *ClientStore {
-	session, err := mgo.Dial(cfg.URL)
+	session, err := mgo.DialWithInfo(
+		&mgo.DialInfo{
+			Addrs: []string{
+				cfg.URL,
+			},
+			Database: cfg.DB,
+			Username: cfg.Username,
+			Password: cfg.Password,
+			Timeout:  timeout,
+		},
+	)
 	if err != nil {
 		panic(err)
 	}

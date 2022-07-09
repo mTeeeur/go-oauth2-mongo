@@ -8,7 +8,7 @@ import (
 )
 
 func TestClientStore(t *testing.T) {
-	store := NewClientStore(NewConfig(url, dbName))
+	store := NewClientStore(NewConfig(url, dbName, "", ""))
 
 	client := &models.Client{
 		ID:     "id",
